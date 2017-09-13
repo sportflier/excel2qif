@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -21,37 +22,70 @@ namespace ExcelToQif
             InitializeComponent();
             dataGridView1.AutoGenerateColumns = true;
         }
-                     
 
-        private void panel1_DragEnter(object sender, DragEventArgs e)
+        private DataSet ds = null;
+       
+
+        private void button1_Click(object sender, EventArgs e)
         {
-            e.Effect = DragDropEffects.Copy;
-            Point p = Cursor.Position;
-            Win32Point wp;
-            wp.x = p.X;
-            wp.y = p.Y;
-            IDropTargetHelper dropHelper = (IDropTargetHelper)new DragDropHelper();
-            dropHelper.DragEnter(IntPtr.Zero, (ComIDataObject)e.Data, ref wp, (int)e.Effect);
+            if (!ReadyToWrite())
+            {
+                MessageBox.Show("not ready");
+                return;
+            }
+
+            Stream stream;
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "qif files (*.qif)|*.qif";
+            sfd.FilterIndex = 2;
+            sfd.RestoreDirectory = true;
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                if ((stream = sfd.OpenFile()) != null)
+                {
+                    GenerateQif(stream, ds.Tables[0]);
+                    stream.Close();
+                }
+            }
         }
 
-        private void panel1_DragLeave(object sender, EventArgs e)
+        private void GenerateQif(Stream stream, DataTable dt)
         {
-            IDropTargetHelper dropHelper = (IDropTargetHelper)new DragDropHelper();
-            dropHelper.DragLeave();
+            using (StreamWriter sw = new StreamWriter(stream))
+            {
+                sw.WriteLine("!Type:Bank");
+                foreach(DataRow r in dt.Rows)
+                {
+                    sw.WriteLine("D{0}", GetDate(r).ToString("dd/MM/yy"));
+                    sw.WriteLine("T{0}", GetValue(r));
+                    sw.WriteLine("P{0}", GetPayee(r));
+                    sw.WriteLine("^");
+                }
+            }                
         }
 
-        private void panel1_DragOver(object sender, DragEventArgs e)
+        private string GetPayee(DataRow r)
         {
-            e.Effect = DragDropEffects.Copy;
-            Point p = Cursor.Position;
-            Win32Point wp;
-            wp.x = p.X;
-            wp.y = p.Y;
-            IDropTargetHelper dropHelper = (IDropTargetHelper)new DragDropHelper();
-            dropHelper.DragOver(ref wp, (int)e.Effect);
+            return r[txtPayee.Text].ToString();
         }
 
-        private void panel1_DragDrop(object sender, DragEventArgs e)
+        private DateTime GetDate(DataRow r)
+        {
+            return Convert.ToDateTime(r[txtDate.Text]);
+        }
+
+        private string GetValue(DataRow r)
+        {
+            return Convert.ToDecimal(r[txtValue.Text]).ToString(CultureInfo.InvariantCulture);
+        }
+
+        private bool ReadyToWrite()
+        {
+            return true;
+        }
+
+        private void dataGridView1_DragDrop(object sender, DragEventArgs e)
         {
             e.Effect = DragDropEffects.Copy;
             Point p = Cursor.Position;
@@ -63,53 +97,45 @@ namespace ExcelToQif
 
             string[] files = e.Data.GetData(DataFormats.FileDrop) as string[]; // get all files droppeds  
             if (files != null && files.Any())
-            {                
+            {
                 using (var stream = File.Open(files.First(), FileMode.Open, FileAccess.Read))
                 {
                     using (var reader = ExcelReaderFactory.CreateReader(stream))
                     {
-                        DataSet ds = reader.AsDataSet();
+                        ds = reader.AsDataSet();
                         dataGridView1.DataSource = ds.Tables[0];
-                        
+                        lblDrop.Visible = false;
                     }
                 }
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void dataGridView1_DragEnter(object sender, DragEventArgs e)
         {
-            if (!ReadyToWrite())
-            {
-                MessageBox.Show("not ready");
-                return;
-            }
-
-            Stream myStream;
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-
-            saveFileDialog1.Filter = "qif files (*.qif)|*.qif|All files (*.*)|*.*";
-            saveFileDialog1.FilterIndex = 2;
-            saveFileDialog1.RestoreDirectory = true;
-
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                if ((myStream = saveFileDialog1.OpenFile()) != null)
-                {
-                    GenerateQif();
-                    myStream.Close();
-                }
-            }
+            e.Effect = DragDropEffects.Copy;
+            Point p = Cursor.Position;
+            Win32Point wp;
+            wp.x = p.X;
+            wp.y = p.Y;
+            IDropTargetHelper dropHelper = (IDropTargetHelper)new DragDropHelper();
+            dropHelper.DragEnter(IntPtr.Zero, (ComIDataObject)e.Data, ref wp, (int)e.Effect);
         }
 
-        private void GenerateQif()
+        private void dataGridView1_DragLeave(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            IDropTargetHelper dropHelper = (IDropTargetHelper)new DragDropHelper();
+            dropHelper.DragLeave();
         }
 
-        private bool ReadyToWrite()
+        private void dataGridView1_DragOver(object sender, DragEventArgs e)
         {
-            return false;
+            e.Effect = DragDropEffects.Copy;
+            Point p = Cursor.Position;
+            Win32Point wp;
+            wp.x = p.X;
+            wp.y = p.Y;
+            IDropTargetHelper dropHelper = (IDropTargetHelper)new DragDropHelper();
+            dropHelper.DragOver(ref wp, (int)e.Effect);
         }
-
     }
 }
