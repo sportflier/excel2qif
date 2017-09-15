@@ -1,5 +1,6 @@
 ﻿using DragDropLib;
 using ExcelDataReader;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,6 +18,7 @@ namespace ExcelToQif
 {
     public partial class Form1 : MetroFramework.Forms.MetroForm
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
         public Form1()
         {
             InitializeComponent();
@@ -57,27 +59,54 @@ namespace ExcelToQif
                 sw.WriteLine("!Type:Bank");
                 foreach(DataRow r in dt.Rows)
                 {
-                    sw.WriteLine("D{0}", GetDate(r).ToString("dd/MM/yy"));
-                    sw.WriteLine("T{0}", GetValue(r));
-                    sw.WriteLine("P{0}", GetPayee(r));
-                    sw.WriteLine("^");
+                    if (GetDate(r) != DateTime.MinValue && GetValue(r) != null && GetPayee(r) != null)
+                    {
+                        sw.WriteLine("D{0}", GetDate(r).ToString("dd/MM/yy"));
+                        sw.WriteLine("T{0}", GetValue(r));
+                        sw.WriteLine("P{0}", GetPayee(r));
+                        sw.WriteLine("^");
+                    }
                 }
             }                
         }
 
         private string GetPayee(DataRow r)
         {
-            return r[txtPayee.Text].ToString();
+            try
+            {
+                return r[txtPayee.Text].ToString();
+            }
+            catch(Exception e)
+            {
+                logger.Warn(e, "getting payee");
+                return null;
+            }
         }
 
         private DateTime GetDate(DataRow r)
         {
-            return Convert.ToDateTime(r[txtDate.Text]);
+            try
+            {
+                return Convert.ToDateTime(r[txtDate.Text]);
+            }
+            catch(Exception e)
+            {
+                logger.Warn(e, "getting date");
+                return DateTime.MinValue;
+            }
         }
 
         private string GetValue(DataRow r)
         {
-            return Convert.ToDecimal(r[txtValue.Text]).ToString(CultureInfo.InvariantCulture);
+            try
+            {
+                return Convert.ToDecimal(r[txtValue.Text]).ToString(CultureInfo.InvariantCulture);
+            }
+            catch(Exception e)
+            {
+                logger.Warn(e, "getting value");
+                return null;
+            }
         }
 
         private bool ReadyToWrite()
@@ -105,6 +134,8 @@ namespace ExcelToQif
                         ds = reader.AsDataSet();
                         dataGridView1.DataSource = ds.Tables[0];
                         lblDrop.Visible = false;
+                        txtDate.BackColor = Color.Yellow;
+                        txtDate.WaterMark = "Pelase double-click date column.";
                     }
                 }
             }
@@ -136,6 +167,48 @@ namespace ExcelToQif
             wp.y = p.Y;
             IDropTargetHelper dropHelper = (IDropTargetHelper)new DragDropHelper();
             dropHelper.DragOver(ref wp, (int)e.Effect);
+        }
+
+        private void dataGridView1_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (ChoosingDateColumn())
+            {
+                txtDate.Text = ds.Tables[0].Columns[e.ColumnIndex].ColumnName;
+                dataGridView1.Columns[e.ColumnIndex].HeaderCell.Style.BackColor = Color.Yellow;
+            }
+        }
+
+        private bool ChoosingDateColumn()
+        {
+            return true;
+        }
+
+        private void txtDate_Click(object sender, EventArgs e)
+        {
+            if (ds == null)
+                MetroFramework.MetroMessageBox.Show(this, "Please drop excel file first");
+            else
+            {
+                txtDate.BackColor = Color.Yellow;
+                MetroFramework.MetroMessageBox.Show(this, "Please double-click the choosen date column.");
+            }
+        }
+
+        private void txtValue_Click(object sender, EventArgs e)
+        {
+            if (ds == null)
+                MetroFramework.MetroMessageBox.Show(this, "Please drop excel file first");
+        }
+
+        private void txtPayee_Click(object sender, EventArgs e)
+        {
+            if (ds == null)
+                MetroFramework.MetroMessageBox.Show(this, "Please drop excel file first");
+        }
+
+        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }
