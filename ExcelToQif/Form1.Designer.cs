@@ -37,12 +37,12 @@ namespace ExcelToQif
             this.txtDate = new MetroFramework.Controls.MetroTextBox();
             this.txtPayee = new MetroFramework.Controls.MetroTextBox();
             this.txtValue = new MetroFramework.Controls.MetroTextBox();
-            this.radioButton1 = new MetroRadioButton();
-            this.radioButton2 = new MetroRadioButton();
-            this.radioButton3 = new MetroRadioButton();
+            this.radioDate = new MetroFramework.Controls.MetroRadioButton();
+            this.radioPayee = new MetroFramework.Controls.MetroRadioButton();
+            this.radioValue = new MetroFramework.Controls.MetroRadioButton();
             this.button1 = new MetroFramework.Controls.MetroButton();
             this.dataGridView1 = new MetroFramework.Controls.MetroGrid();
-            this.lblDrop = new MetroLabel();
+            this.lblDrop = new MetroFramework.Controls.MetroLabel();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
@@ -53,13 +53,13 @@ namespace ExcelToQif
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 304F));
             this.tableLayoutPanel1.Controls.Add(this.txtDate, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.txtPayee, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.txtValue, 2, 1);
-            this.tableLayoutPanel1.Controls.Add(this.radioButton1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.radioButton2, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.radioButton3, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.radioDate, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.radioPayee, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.radioValue, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.button1, 3, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(20, 60);
@@ -86,11 +86,13 @@ namespace ExcelToQif
             this.txtDate.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
             this.txtDate.CustomButton.UseSelectable = true;
             this.txtDate.CustomButton.Visible = false;
+            this.txtDate.Enabled = false;
             this.txtDate.Lines = new string[0];
             this.txtDate.Location = new System.Drawing.Point(3, 43);
             this.txtDate.MaxLength = 32767;
             this.txtDate.Name = "txtDate";
-            this.txtDate.PasswordChar = '\0';            
+            this.txtDate.PasswordChar = '\0';
+            this.txtDate.PromptText = "Date Column";
             this.txtDate.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.txtDate.SelectedText = "";
             this.txtDate.SelectionLength = 0;
@@ -119,6 +121,7 @@ namespace ExcelToQif
             this.txtPayee.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
             this.txtPayee.CustomButton.UseSelectable = true;
             this.txtPayee.CustomButton.Visible = false;
+            this.txtPayee.Enabled = false;
             this.txtPayee.Lines = new string[0];
             this.txtPayee.Location = new System.Drawing.Point(175, 43);
             this.txtPayee.MaxLength = 32767;
@@ -152,6 +155,7 @@ namespace ExcelToQif
             this.txtValue.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
             this.txtValue.CustomButton.UseSelectable = true;
             this.txtValue.CustomButton.Visible = false;
+            this.txtValue.Enabled = false;
             this.txtValue.Lines = new string[0];
             this.txtValue.Location = new System.Drawing.Point(347, 43);
             this.txtValue.MaxLength = 32767;
@@ -171,41 +175,47 @@ namespace ExcelToQif
             this.txtValue.WaterMarkFont = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Pixel);
             this.txtValue.Click += new System.EventHandler(this.txtValue_Click);
             // 
-            // radioButton1
+            // radioDate
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.radioButton1.Location = new System.Drawing.Point(3, 3);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(86, 17);
-            this.radioButton1.TabIndex = 6;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Date Column";            
+            this.radioDate.AutoSize = true;
+            this.radioDate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.radioDate.Enabled = false;
+            this.radioDate.Location = new System.Drawing.Point(3, 3);
+            this.radioDate.Name = "radioDate";
+            this.radioDate.Size = new System.Drawing.Size(93, 15);
+            this.radioDate.TabIndex = 6;
+            this.radioDate.TabStop = true;
+            this.radioDate.Text = "Date Column";
+            this.radioDate.UseSelectable = true;
             // 
-            // radioButton2
+            // radioPayee
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(175, 3);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(93, 17);
-            this.radioButton2.TabIndex = 7;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "Payee Column";
-            
+            this.radioPayee.AutoSize = true;
+            this.radioPayee.Enabled = false;
+            this.radioPayee.Location = new System.Drawing.Point(175, 3);
+            this.radioPayee.Name = "radioPayee";
+            this.radioPayee.Size = new System.Drawing.Size(100, 15);
+            this.radioPayee.TabIndex = 7;
+            this.radioPayee.TabStop = true;
+            this.radioPayee.Text = "Payee Column";
+            this.radioPayee.UseSelectable = true;
+            this.radioPayee.CheckedChanged += new System.EventHandler(this.radioPayee_CheckedChanged);
             // 
-            // radioButton3
+            // radioValue
             // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(347, 3);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(90, 17);
-            this.radioButton3.TabIndex = 8;
-            this.radioButton3.TabStop = true;
-            this.radioButton3.Text = "Value Column";
-            
+            this.radioValue.AutoSize = true;
+            this.radioValue.Enabled = false;
+            this.radioValue.Location = new System.Drawing.Point(347, 3);
+            this.radioValue.Name = "radioValue";
+            this.radioValue.Size = new System.Drawing.Size(97, 15);
+            this.radioValue.TabIndex = 8;
+            this.radioValue.TabStop = true;
+            this.radioValue.Text = "Value Column";
+            this.radioValue.UseSelectable = true;
             // 
             // button1
             // 
+            this.button1.Enabled = false;
             this.button1.Location = new System.Drawing.Point(519, 3);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(166, 32);
@@ -259,6 +269,7 @@ namespace ExcelToQif
             this.dataGridView1.Size = new System.Drawing.Size(820, 339);
             this.dataGridView1.TabIndex = 3;
             this.dataGridView1.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_ColumnHeaderMouseClick);
+            this.dataGridView1.ColumnHeaderMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_ColumnHeaderMouseDoubleClick);
             this.dataGridView1.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridView1_DragDrop);
             this.dataGridView1.DragEnter += new System.Windows.Forms.DragEventHandler(this.dataGridView1_DragEnter);
             this.dataGridView1.DragOver += new System.Windows.Forms.DragEventHandler(this.dataGridView1_DragOver);
@@ -267,11 +278,17 @@ namespace ExcelToQif
             // lblDrop
             // 
             this.lblDrop.AutoSize = true;
-            this.lblDrop.Location = new System.Drawing.Point(172, 254);
+            this.lblDrop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.lblDrop.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.lblDrop.FontWeight = MetroFramework.MetroLabelWeight.Bold;
+            this.lblDrop.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.lblDrop.Location = new System.Drawing.Point(305, 289);
             this.lblDrop.Name = "lblDrop";
-            this.lblDrop.Size = new System.Drawing.Size(35, 13);
+            this.lblDrop.Size = new System.Drawing.Size(228, 25);
             this.lblDrop.TabIndex = 7;
-            this.lblDrop.Text = "label1";
+            this.lblDrop.Text = "Drop your excel file here!";
+            this.lblDrop.UseCustomBackColor = true;
+            this.lblDrop.UseCustomForeColor = true;
             // 
             // Form1
             // 
@@ -298,9 +315,9 @@ namespace ExcelToQif
         private MetroTextBox txtPayee;
         private MetroButton button1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private MetroRadioButton radioButton1;
-        private MetroRadioButton radioButton2;
-        private MetroRadioButton radioButton3;
+        private MetroRadioButton radioDate;
+        private MetroRadioButton radioPayee;
+        private MetroRadioButton radioValue;
         private MetroGrid dataGridView1;
         private MetroLabel lblDrop;
     }

@@ -2,15 +2,11 @@
 using ExcelDataReader;
 using NLog;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ComIDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
@@ -18,6 +14,10 @@ namespace ExcelToQif
 {
     public partial class Form1 : MetroFramework.Forms.MetroForm
     {
+        private Color dateColor = Color.Yellow;
+        private Color valueColor = Color.Red;
+        private Color payeeColo = Color.Green;
+
         private static Logger logger = LogManager.GetCurrentClassLogger();
         public Form1()
         {
@@ -26,8 +26,7 @@ namespace ExcelToQif
         }
 
         private DataSet ds = null;
-       
-
+        
         private void button1_Click(object sender, EventArgs e)
         {
             if (!ReadyToWrite())
@@ -124,7 +123,7 @@ namespace ExcelToQif
             IDropTargetHelper dropHelper = (IDropTargetHelper)new DragDropHelper();
             dropHelper.Drop((ComIDataObject)e.Data, ref wp, (int)e.Effect);
 
-            string[] files = e.Data.GetData(DataFormats.FileDrop) as string[]; // get all files droppeds  
+            string[] files = e.Data.GetData(DataFormats.FileDrop) as string[]; 
             if (files != null && files.Any())
             {
                 using (var stream = File.Open(files.First(), FileMode.Open, FileAccess.Read))
@@ -134,11 +133,24 @@ namespace ExcelToQif
                         ds = reader.AsDataSet();
                         dataGridView1.DataSource = ds.Tables[0];
                         lblDrop.Visible = false;
-                        txtDate.BackColor = Color.Yellow;
-                        txtDate.WaterMark = "Pelase double-click date column.";
+                        SetComponentsEnabled(true);
+                        SelectDate();
                     }
                 }
             }
+        }
+
+        private void SelectDate()
+        {
+            radioDate.Checked = true;            
+            txtDate.BackColor = dateColor;
+            txtDate.WaterMark = "Pelase double-click date column.";
+        }
+
+        private void SetComponentsEnabled(bool enabled)
+        {
+            radioDate.Enabled = radioPayee.Enabled = radioValue.Enabled = enabled;
+            txtDate.Enabled = txtPayee.Enabled = txtValue.Enabled = enabled;
         }
 
         private void dataGridView1_DragEnter(object sender, DragEventArgs e)
@@ -174,13 +186,25 @@ namespace ExcelToQif
             if (ChoosingDateColumn())
             {
                 txtDate.Text = ds.Tables[0].Columns[e.ColumnIndex].ColumnName;
-                dataGridView1.Columns[e.ColumnIndex].HeaderCell.Style.BackColor = Color.Yellow;
+                dataGridView1.Columns[e.ColumnIndex].HeaderCell.Style.BackColor = dateColor;
+                radioPayee.Checked = true;
             }
+
+            if (ChoosingValueColumn())
+            {
+                txtValue.Text = ds.Tables[0].Columns[e.ColumnIndex].ColumnName;
+                dataGridView1.Columns[e.ColumnIndex].HeaderCell.Style.BackColor = valueColor;
+            }
+        }
+
+        private bool ChoosingValueColumn()
+        {
+            return radioValue.Checked;
         }
 
         private bool ChoosingDateColumn()
         {
-            return true;
+            return radioDate.Checked;
         }
 
         private void txtDate_Click(object sender, EventArgs e)
@@ -209,6 +233,17 @@ namespace ExcelToQif
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void radioPayee_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioPayee.Checked)
+                txtPayee.WaterMark = "Double click on Payee Column";
+        }
+
+        private void dataGridView1_ColumnHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            dataGridView1_ColumnHeaderMouseClick(sender, e);
         }
     }
 }
