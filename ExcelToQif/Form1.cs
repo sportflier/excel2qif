@@ -123,8 +123,7 @@ namespace ExcelToQif
             IDropTargetHelper dropHelper = (IDropTargetHelper)new DragDropHelper();
             dropHelper.Drop((ComIDataObject)e.Data, ref wp, (int)e.Effect);
 
-            string[] files = e.Data.GetData(DataFormats.FileDrop) as string[]; 
-            if (files != null && files.Any())
+            if (e.Data.GetData(DataFormats.FileDrop) is string[] files && files.Any())
             {
                 using (var stream = File.Open(files.First(), FileMode.Open, FileAccess.Read))
                 {
