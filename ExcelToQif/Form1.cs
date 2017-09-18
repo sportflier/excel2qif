@@ -14,9 +14,9 @@ namespace ExcelToQif
 {
     public partial class Form1 : MetroFramework.Forms.MetroForm
     {
-        private Color dateColor = Color.Yellow;
+        private Color dateColor = Color.Blue;
         private Color valueColor = Color.Red;
-        private Color payeeColo = Color.Green;
+        private Color payeeColor = Color.Green;
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
         public Form1()
@@ -53,6 +53,7 @@ namespace ExcelToQif
 
         private void GenerateQif(Stream stream, DataTable dt)
         {
+            int lines = 0;
             using (StreamWriter sw = new StreamWriter(stream))
             {
                 sw.WriteLine("!Type:Bank");
@@ -64,9 +65,12 @@ namespace ExcelToQif
                         sw.WriteLine("T{0}", GetValue(r));
                         sw.WriteLine("P{0}", GetPayee(r));
                         sw.WriteLine("^");
+                        lines++;
                     }
                 }
-            }                
+            }
+            if (lines > 0)
+                MetroFramework.MetroMessageBox.Show(this, lines + " lines generated.");
         }
 
         private string GetPayee(DataRow r)
@@ -99,7 +103,10 @@ namespace ExcelToQif
         {
             try
             {
-                return Convert.ToDecimal(r[txtValue.Text]).ToString(CultureInfo.InvariantCulture);
+                decimal value = Convert.ToDecimal(r[txtValue.Text]);
+                if (chkInvertCD.Checked)
+                    value *= -1;
+                return value.ToString(CultureInfo.InvariantCulture);
             }
             catch(Exception e)
             {
@@ -131,6 +138,7 @@ namespace ExcelToQif
                     {
                         ds = reader.AsDataSet();
                         dataGridView1.DataSource = ds.Tables[0];
+                        DisableSorting();
                         lblDrop.Visible = false;
                         SetComponentsEnabled(true);
                         SelectDate();
@@ -139,17 +147,26 @@ namespace ExcelToQif
             }
         }
 
+        private void DisableSorting()
+        {
+            foreach (DataGridViewColumn column in dataGridView1.Columns)
+            {
+                column.SortMode = DataGridViewColumnSortMode.NotSortable;
+            }
+        }
+
         private void SelectDate()
         {
             radioDate.Checked = true;            
             txtDate.BackColor = dateColor;
-            txtDate.WaterMark = "Pelase double-click date column.";
+            txtDate.WaterMark = "Please click date column.";
         }
 
         private void SetComponentsEnabled(bool enabled)
         {
             radioDate.Enabled = radioPayee.Enabled = radioValue.Enabled = enabled;
             txtDate.Enabled = txtPayee.Enabled = txtValue.Enabled = enabled;
+            chkInvertCD.Enabled = enabled;
         }
 
         private void dataGridView1_DragEnter(object sender, DragEventArgs e)
@@ -185,20 +202,38 @@ namespace ExcelToQif
             if (ChoosingDateColumn())
             {
                 txtDate.Text = ds.Tables[0].Columns[e.ColumnIndex].ColumnName;
+                txtDate.BackColor = 
                 dataGridView1.Columns[e.ColumnIndex].HeaderCell.Style.BackColor = dateColor;
                 radioPayee.Checked = true;
+                return;
+            }
+
+            if (ChoosingPayeeColumn())
+            {
+                txtPayee.Text = ds.Tables[0].Columns[e.ColumnIndex].ColumnName;
+                txtPayee.BackColor =
+                dataGridView1.Columns[e.ColumnIndex].HeaderCell.Style.BackColor = payeeColor;
+                radioValue.Checked = true;
+                return;
             }
 
             if (ChoosingValueColumn())
             {
                 txtValue.Text = ds.Tables[0].Columns[e.ColumnIndex].ColumnName;
+                txtValue.BackColor = 
                 dataGridView1.Columns[e.ColumnIndex].HeaderCell.Style.BackColor = valueColor;
+                button1.Enabled = true;
             }
         }
 
         private bool ChoosingValueColumn()
         {
             return radioValue.Checked;
+        }
+
+        private bool ChoosingPayeeColumn()
+        {
+            return radioPayee.Checked;
         }
 
         private bool ChoosingDateColumn()
@@ -227,11 +262,6 @@ namespace ExcelToQif
         {
             if (ds == null)
                 MetroFramework.MetroMessageBox.Show(this, "Please drop excel file first");
-        }
-
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-
         }
 
         private void radioPayee_CheckedChanged(object sender, EventArgs e)

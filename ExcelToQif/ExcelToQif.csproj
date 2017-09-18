@@ -7,7 +7,7 @@
     <ProjectGuid>{EB1807D4-F6B7-4245-9229-021121DDEAE1}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>ExcelToQif</RootNamespace>
-    <AssemblyName>ExcelToQif</AssemblyName>
+    <AssemblyName>excel2qif</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -22,10 +22,12 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>https://github.com/jcardus/excel2qif/</InstallUrl>
+    <InstallUrl>https://s3.eu-west-2.amazonaws.com/excel2qif/</InstallUrl>
+    <ProductName>excel2qif</ProductName>
+    <PublisherName>Joaquim Cardeira</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>5</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -54,7 +56,8 @@
     <ManifestCertificateThumbprint>55EE40FF43AE0929BE2ED8225542E570E05B7CA0</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>ExcelToQif_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>
+    </ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -114,7 +117,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <None Include="ExcelToQif_TemporaryKey.pfx" />
     <None Include="NLog.config" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>

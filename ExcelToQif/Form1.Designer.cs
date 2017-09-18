@@ -39,11 +39,14 @@ namespace ExcelToQif
             this.txtValue = new MetroFramework.Controls.MetroTextBox();
             this.radioDate = new MetroFramework.Controls.MetroRadioButton();
             this.radioPayee = new MetroFramework.Controls.MetroRadioButton();
-            this.radioValue = new MetroFramework.Controls.MetroRadioButton();
             this.button1 = new MetroFramework.Controls.MetroButton();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.chkInvertCD = new MetroFramework.Controls.MetroCheckBox();
+            this.radioValue = new MetroFramework.Controls.MetroRadioButton();
             this.dataGridView1 = new MetroFramework.Controls.MetroGrid();
             this.lblDrop = new MetroFramework.Controls.MetroLabel();
             this.tableLayoutPanel1.SuspendLayout();
+            this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -56,20 +59,19 @@ namespace ExcelToQif
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 304F));
             this.tableLayoutPanel1.Controls.Add(this.txtDate, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.txtPayee, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.txtValue, 2, 1);
             this.tableLayoutPanel1.Controls.Add(this.radioDate, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.radioPayee, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.button1, 3, 1);
+            this.tableLayoutPanel1.Controls.Add(this.panel1, 2, 1);
             this.tableLayoutPanel1.Controls.Add(this.radioValue, 2, 0);
-            this.tableLayoutPanel1.Controls.Add(this.button1, 3, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(20, 60);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(820, 81);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 28.39506F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 71.60493F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(820, 75);
             this.tableLayoutPanel1.TabIndex = 6;
-            this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
             // 
             // txtDate
             // 
@@ -88,7 +90,7 @@ namespace ExcelToQif
             this.txtDate.CustomButton.Visible = false;
             this.txtDate.Enabled = false;
             this.txtDate.Lines = new string[0];
-            this.txtDate.Location = new System.Drawing.Point(3, 43);
+            this.txtDate.Location = new System.Drawing.Point(3, 24);
             this.txtDate.MaxLength = 32767;
             this.txtDate.Name = "txtDate";
             this.txtDate.PasswordChar = '\0';
@@ -123,7 +125,7 @@ namespace ExcelToQif
             this.txtPayee.CustomButton.Visible = false;
             this.txtPayee.Enabled = false;
             this.txtPayee.Lines = new string[0];
-            this.txtPayee.Location = new System.Drawing.Point(175, 43);
+            this.txtPayee.Location = new System.Drawing.Point(175, 24);
             this.txtPayee.MaxLength = 32767;
             this.txtPayee.Name = "txtPayee";
             this.txtPayee.PasswordChar = '\0';
@@ -135,6 +137,7 @@ namespace ExcelToQif
             this.txtPayee.ShortcutsEnabled = true;
             this.txtPayee.Size = new System.Drawing.Size(166, 20);
             this.txtPayee.TabIndex = 5;
+            this.txtPayee.UseCustomBackColor = true;
             this.txtPayee.UseSelectable = true;
             this.txtPayee.WaterMark = "Payee Column";
             this.txtPayee.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
@@ -157,7 +160,7 @@ namespace ExcelToQif
             this.txtValue.CustomButton.Visible = false;
             this.txtValue.Enabled = false;
             this.txtValue.Lines = new string[0];
-            this.txtValue.Location = new System.Drawing.Point(347, 43);
+            this.txtValue.Location = new System.Drawing.Point(0, 0);
             this.txtValue.MaxLength = 32767;
             this.txtValue.Name = "txtValue";
             this.txtValue.PasswordChar = '\0';
@@ -169,6 +172,7 @@ namespace ExcelToQif
             this.txtValue.ShortcutsEnabled = true;
             this.txtValue.Size = new System.Drawing.Size(166, 20);
             this.txtValue.TabIndex = 1;
+            this.txtValue.UseCustomBackColor = true;
             this.txtValue.UseSelectable = true;
             this.txtValue.WaterMark = "Value Column";
             this.txtValue.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
@@ -201,6 +205,37 @@ namespace ExcelToQif
             this.radioPayee.UseSelectable = true;
             this.radioPayee.CheckedChanged += new System.EventHandler(this.radioPayee_CheckedChanged);
             // 
+            // button1
+            // 
+            this.button1.Enabled = false;
+            this.button1.Location = new System.Drawing.Point(553, 24);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(166, 32);
+            this.button1.TabIndex = 0;
+            this.button1.Text = "Generate QIF file";
+            this.button1.UseSelectable = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.chkInvertCD);
+            this.panel1.Controls.Add(this.txtValue);
+            this.panel1.Location = new System.Drawing.Point(347, 24);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(200, 48);
+            this.panel1.TabIndex = 10;
+            // 
+            // chkInvertCD
+            // 
+            this.chkInvertCD.AutoSize = true;
+            this.chkInvertCD.Enabled = false;
+            this.chkInvertCD.Location = new System.Drawing.Point(0, 26);
+            this.chkInvertCD.Name = "chkInvertCD";
+            this.chkInvertCD.Size = new System.Drawing.Size(126, 15);
+            this.chkInvertCD.TabIndex = 9;
+            this.chkInvertCD.Text = "Invert Credit/Debit?";
+            this.chkInvertCD.UseSelectable = true;
+            // 
             // radioValue
             // 
             this.radioValue.AutoSize = true;
@@ -212,17 +247,6 @@ namespace ExcelToQif
             this.radioValue.TabStop = true;
             this.radioValue.Text = "Value Column";
             this.radioValue.UseSelectable = true;
-            // 
-            // button1
-            // 
-            this.button1.Enabled = false;
-            this.button1.Location = new System.Drawing.Point(519, 3);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(166, 32);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Generate QIF file";
-            this.button1.UseSelectable = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // dataGridView1
             // 
@@ -253,7 +277,7 @@ namespace ExcelToQif
             this.dataGridView1.EnableHeadersVisualStyles = false;
             this.dataGridView1.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.dataGridView1.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.dataGridView1.Location = new System.Drawing.Point(20, 141);
+            this.dataGridView1.Location = new System.Drawing.Point(20, 135);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -266,7 +290,7 @@ namespace ExcelToQif
             this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(820, 339);
+            this.dataGridView1.Size = new System.Drawing.Size(820, 345);
             this.dataGridView1.TabIndex = 3;
             this.dataGridView1.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_ColumnHeaderMouseClick);
             this.dataGridView1.ColumnHeaderMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_ColumnHeaderMouseDoubleClick);
@@ -303,6 +327,8 @@ namespace ExcelToQif
             this.Text = "Excel2QIF";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -320,6 +346,8 @@ namespace ExcelToQif
         private MetroRadioButton radioValue;
         private MetroGrid dataGridView1;
         private MetroLabel lblDrop;
+        private System.Windows.Forms.Panel panel1;
+        private MetroCheckBox chkInvertCD;
     }
 }
 
