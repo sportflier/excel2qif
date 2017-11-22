@@ -6,5 +6,5 @@ You can try it right away:
 
 https://s3.eu-west-2.amazonaws.com/excel2qif/excel2qif.application
 
-You can reach me here: joaquim.cardeira at gmail.com
+
 
