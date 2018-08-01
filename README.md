@@ -4,7 +4,7 @@ There was an excel add-in called xl2qif that worked very well but got obsolet. I
 This is great for who still uses microsoft money to manage their finances. I still use it and find it very good.
 You can try it right away:
 
-https://s3.eu-west-2.amazonaws.com/excel2qif/excel2qif.application
+https://s3.eu-west-3.amazonaws.com/excelqif/excel2qif.application
 
 
 
